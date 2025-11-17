@@ -1,1 +1,435 @@
-<h1>Directory Coming Soon</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>US Small Business Chamber - Member Directory</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            color: white;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .search-container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .search-container label {
+            display: block;
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        select {
+            width: 100%;
+            padding: 15px;
+            font-size: 1em;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        select:hover {
+            border-color: #667eea;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .filter-container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .filter-container label {
+            display: block;
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            background: white;
+            color: #333;
+            font-size: 0.95em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .filter-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .member-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .member-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        }
+
+        .card-header {
+            position: relative;
+            width: 100%;
+            padding-top: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
+        }
+
+        .member-photo {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 25px;
+        }
+
+        .member-name {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .business-name {
+            font-size: 1.1em;
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .expertise-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .expertise-tag {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+
+        .info-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+            color: #666;
+        }
+
+        .info-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-row svg {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            margin-top: 2px;
+            color: #667eea;
+        }
+
+        .info-row a {
+            color: #667eea;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            word-break: break-all;
+        }
+
+        .info-row a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+
+        .address {
+            line-height: 1.6;
+        }
+
+        .no-results {
+            display: none;
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .no-results h2 {
+            color: #333;
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+
+        .no-results p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+
+            .cards-container {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-buttons {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>US Small Business Chamber</h1>
+            <p>Member Directory</p>
+        </header>
+
+        <div class="search-container">
+            <label for="memberSelect">Search by Member Name:</label>
+            <select id="memberSelect">
+                <option value="">All Members</option><option value="hrag kalebjian">Hrag Kalebjian</option>
+            </select>
+        </div>
+
+        <div class="filter-container">
+            <label>Filter by Expertise:</label>
+            <div class="filter-buttons">
+                
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="e-commerce">E-Commerce</button>
+                <button class="filter-btn" data-filter="retail">Retail</button>
+
+            </div>
+        </div>
+
+        <div class="cards-container" id="cardsContainer">
+
+            <div class="member-card" data-name="hrag kalebjian" data-expertise="e-commerce,retail">
+                <div class="card-header">
+                    <img src="https://drive.google.com/uc?id=undefined&export=view" alt="Hrag Kalebjian" class="member-photo">
+                </div>
+                <div class="card-content">
+                    <h2 class="member-name">Hrag Kalebjian</h2>
+                    <div class="business-name">Henry's House of Coffee</div>
+                    <div class="expertise-tags">
+                        <span class="expertise-tag">E-Commerce</span><span class="expertise-tag">Retail</span>
+                    </div>
+                    
+                    <div class="info-row">
+                        <svg fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
+                            <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
+                        </svg>
+                        <a href="mailto:hrag@henryshouseofcoffee.com">hrag@henryshouseofcoffee.com</a>
+                    </div>
+
+                    <div class="info-row">
+                        <svg fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
+                        </svg>
+                        <a href="tel:6506784727">6506784727</a>
+                    </div>
+                    <div class="info-row">
+                        <svg fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+                        </svg>
+                        <div class="address">
+                            1618 Noriega St San Francisco<br>
+                            CA 94122
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <svg fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clip-rule="evenodd"/>
+                        </svg>
+                        <a href="www.henryshouseofcoffee.com" target="_blank">www.henryshouseofcoffee.com</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="no-results" id="noResults">
+            <h2>No Members Found</h2>
+            <p>Please try a different filter or search.</p>
+        </div>
+    </div>
+
+    <script>
+        // Password Protection
+        (function() {
+            const correctPassword = "chamber2024";
+            const storageKey = "chamberDirectoryAuth";
+            
+            if (sessionStorage.getItem(storageKey) !== "true") {
+                let attempts = 0;
+                const maxAttempts = 3;
+                
+                while (attempts < maxAttempts) {
+                    const password = prompt("Please enter the password to access the Member Directory:");
+                    
+                    if (password === null) {
+                        document.body.innerHTML = "<div style='text-align:center;padding:50px;font-family:sans-serif;'><h1>Access Denied</h1><p>You must enter the correct password to view this directory.</p></div>";
+                        return;
+                    }
+                    
+                    if (password === correctPassword) {
+                        sessionStorage.setItem(storageKey, "true");
+                        break;
+                    } else {
+                        attempts++;
+                        if (attempts < maxAttempts) {
+                            alert("Incorrect password. Please try again. (" + (maxAttempts - attempts) + " attempts remaining)");
+                        } else {
+                            alert("Too many failed attempts. Please refresh the page to try again.");
+                            document.body.innerHTML = "<div style='text-align:center;padding:50px;font-family:sans-serif;'><h1>Access Denied</h1><p>Too many failed password attempts. Please refresh the page to try again.</p></div>";
+                            return;
+                        }
+                    }
+                }
+            }
+        })();
+
+        // Member Directory Functionality
+        const memberSelect = document.getElementById('memberSelect');
+        const cardsContainer = document.getElementById('cardsContainer');
+        const noResults = document.getElementById('noResults');
+        const memberCards = document.querySelectorAll('.member-card');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        
+        let currentFilter = 'all';
+        let currentSearch = '';
+
+        // Member search dropdown
+        memberSelect.addEventListener('change', function() {
+            currentSearch = this.value;
+            applyFilters();
+        });
+
+        // Expertise filter buttons
+        filterButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                filterButtons.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentFilter = this.dataset.filter;
+                applyFilters();
+            });
+        });
+
+        function applyFilters() {
+            let visibleCount = 0;
+
+            memberCards.forEach(card => {
+                const cardName = card.dataset.name;
+                const cardExpertise = card.dataset.expertise.split(',');
+                
+                const matchesSearch = !currentSearch || cardName === currentSearch;
+                const matchesFilter = currentFilter === 'all' || 
+                                    cardExpertise.some(exp => exp === currentFilter);
+                
+                if (matchesSearch && matchesFilter) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            if (visibleCount === 0) {
+                cardsContainer.style.display = 'none';
+                noResults.style.display = 'block';
+            } else {
+                cardsContainer.style.display = 'grid';
+                noResults.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
